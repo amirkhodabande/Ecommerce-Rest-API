@@ -18,14 +18,6 @@ const show = async (req, res) => {
     res.status(StatusCodes.OK).json({ user });
 }
 
-const update = async (req, res) => {
-
-}
-
-const updatePassword = async (req, res) => {
-
-}
-
 module.exports = {
-    index, show, update, updatePassword
+    index, show
 }

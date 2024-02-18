@@ -10,7 +10,8 @@ const morgan = require('morgan');
 const connectDB = require('./db/connect');
 
 const authRouter = require('./routes/authRoutes');
-const adminUserRoutes = require('./routes/admin/userRoutes');
+const userRouter = require('./routes/userRoutes');
+const adminUserRouter = require('./routes/admin/userRoutes');
 
 const authenticationMiddleware = require('./middleware/authentication');
 const authorizationMiddleware = require('./middleware/authorization');
@@ -23,8 +24,10 @@ app.use(express.json());
 
 app.use('/api/v1/auth', authRouter);
 
+app.use('/api/v1/users', authenticationMiddleware, userRouter);
+
 // admin routes
-app.use('/api/admin/v1/users', authenticationMiddleware, authorizationMiddleware('admin'), adminUserRoutes);
+app.use('/api/admin/v1/users', authenticationMiddleware, authorizationMiddleware('admin'), adminUserRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
