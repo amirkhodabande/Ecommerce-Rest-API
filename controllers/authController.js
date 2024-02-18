@@ -1,19 +1,15 @@
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
 const Error = require('../errors');
+const utils = require('../utils');
 
 const register = async (req, res) => {
     const { email, name, password } = req.body;
 
     const user = await User.create({ email, name, password });
 
-    const token = jwt.sign({
-        name: user.name,
-        userId: user._id,
-        role: user.role
-    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION_TIME });
-
+    const token = utils.createToken(user);
+ 
     res.status(StatusCodes.CREATED).json({ token });
 }
 
@@ -34,11 +30,7 @@ const login = async (req, res) => {
         throw new Error.BadRequest('Wrong credentials!');
     }
 
-    const token = jwt.sign({
-        name: user.name,
-        userId: user._id,
-        role: user.role
-    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION_TIME });
+    const token = utils.createToken(user);
 
     res.status(StatusCodes.OK).json({ token });
 }
